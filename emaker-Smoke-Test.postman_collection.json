@@ -1,0 +1,6145 @@
+{
+	"info": {
+		"_postman_id": "f435ad85-0496-4e3f-a83e-9065e70abc9c",
+		"name": "emaker-Smoke-Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "access",
+			"item": [
+				{
+					"name": "SUCCESS apiHost/auth/session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check the active environment\", () => {",
+									"  pm.expect(pm.environment.name).to.eql(\"Env - QA API Testing Smoke\");",
+									"});",
+									"",
+									"var data1 = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"token\",data1.token);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setEnvironmentVariable(\"resource\", \"login\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"apiKey\": \"{{apiKeyVar}}\",\r\n    \"secretKey\": \"{{secretKeyVar}}\",\r\n    \"userName\": \"{{userSuccessVar}}\",\r\n    \"password\": \"{{pwdSuccessVar}}\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiHost}}/auth/session",
+							"host": [
+								"{{apiHost}}"
+							],
+							"path": [
+								"auth",
+								"session"
+							]
+						},
+						"description": "## Descripción\r\nEsta API es para que al iniciar sesión con un usuario se genere un token el cuál me permitirá tener acceso a las demás APIS.\r\nPara iniciar sesión necesitaremos estos campos que una vez ingresados ​​serán validados por la API para otorgar acceso.\r\n\r\n## Requisitos en Body\r\nPara crear un registro de inicio de sesión necesitamos enviar la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| apiKey (Not Null) | String |\r\n| secretKey (Not Null) | String |\r\n| userName (Not Null) | String |\r\n| password (Not Null) | String |\r\n\r\n## Código de error:\r\n\r\n### - EMAKER_01\r\nEsta respuesta significa que hubo un error en las validaciones de campo vacío o nulo.\r\n\r\n### - EMAKER_API_KEY_01\r\nEsta respuesta significa que al validar Apikey o SecretKey en la base de datos no se obtuvo porque no existe como tal.\r\n\r\n### - EMAKER_USER_02\r\nEsta respuesta significa que el usuario ingresado UserName no está registrado, no existe en la empresa o el password es incorrecto.\r\n\r\n## Respuesta del método\r\nTe regresa cómo respuesta el token el cuál debe de colocarse en las variables de entorno para poder obtener la autorización a las demás APIS."
+					},
+					"response": [
+						{
+							"name": "ApiKey does not exists",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"incorrect\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 00:06:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-11T19:06:30.952922\",\n    \"message\": \"ApiKey does not exists\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_API_KEY_01\",\n    \"details\": null\n}"
+						},
+						{
+							"name": "FIeld password Null",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"diegochg\",\r\n    \"password\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:26:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:26:50.266911\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"password: password value is null and API cannot be processed\"\n    ]\n}"
+						},
+						{
+							"name": "User does not exists in company",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"incorrect\",\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 00:07:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-11T19:07:17.563545\",\n    \"message\": \"User does not exists in company\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_USER_02\",\n    \"details\": null\n}"
+						},
+						{
+							"name": "Field password Empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"diegochg\",\r\n    \"password\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:26:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:26:29.969894\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"password: password value is empty and the API cannot be processed\"\n    ]\n}"
+						},
+						{
+							"name": "Field secretKey Null",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": null,\r\n    \"userName\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:24:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:24:32.599432\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"secretKey: secretKey value is null and API cannot be processed\"\n    ]\n}"
+						},
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"diegochg\",\r\n    \"password\": \"diegochg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain;charset=UTF-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "178"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 05 Mar 2021 21:57:41 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkaWVnb2NoZyIsImV4cCI6MTYxNTAxNzQ2MSwiaWF0IjoxNjE0OTgxNDYxfQ.rfKtnO210TEw_9Y-YbXay2NVDGqsWcvFkwUBTtmU5ij8x8o-BDlkNeyYDX8JHs7kFXidZ9-Amsw9WPS-vHrtfQ"
+						},
+						{
+							"name": "Field userName Empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"\",\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:24:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:24:59.45303\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"userName: userName value is empty and the API cannot be processed\"\n    ]\n}"
+						},
+						{
+							"name": "Field apiKey Empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:22:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:22:39.577534\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"apiKey: apiKey value is empty and the API cannot be processed\"\n    ]\n}"
+						},
+						{
+							"name": "FIeld userName Null",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": null,\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:25:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:25:46.839836\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"userName: userName value is null and API cannot be processed\"\n    ]\n}"
+						},
+						{
+							"name": "Field apiKey Null",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": null,\r\n    \"secretKey\": \"123456789\",\r\n    \"userName\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:23:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:23:05.262079\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"apiKey: apiKey value is null and API cannot be processed\"\n    ]\n}"
+						},
+						{
+							"name": "FIeld secretKey Empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiKey\": \"123456789\",\r\n    \"secretKey\": \"\",\r\n    \"userName\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/v1/emaker/auth/session",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"emaker",
+										"auth",
+										"session"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Mar 2021 14:24:11 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-03-12T09:24:11.458792\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/auth/session\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"secretKey: secretKey value is empty and the API cannot be processed\"\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "scheduler",
+			"item": [
+				{
+					"name": "apikey",
+					"item": []
+				},
+				{
+					"name": "company",
+					"item": [
+						{
+							"name": "1-ACCES apiHost/company",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"var jsonData1 = JSON.parse(responseBody);",
+											"pm.environment.set(\"varCompanyCode\",jsonData1.companyCode);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"description\": \"Compañía de origen Piura\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"{{$randomFullName}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/company",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"company"
+									]
+								},
+								"description": "## Descripción\r\nEsta API registra y guarda la información de una compañía en la base de datos.\r\nPara que ésta y las demás API funcionen correctamente, necesitan el token en Autorización -> Bearer Token\r\n\r\n## Requisitos en Body\r\nPara crear una compañía necesitamos enviar la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| descripción (Not null) | String |\r\n| logo (Not null) | String |\r\n| sitio web (Not null) | String |\r\n| dirección (Not null) | String |\r\n| secundariaAddress (Null) | String |\r\n| shortName (Not null) | String |\r\n\r\n## Código de error:\r\n\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API.\r\n\r\n### - EMAKER_01\r\nEsta respuesta significa que hubo un error en las validaciones de campo vacío o nulo.\r\n\r\n### - EMAKER_COMPANY_02\r\nEsta respuesta significa que la compañía que se quiere crear ya existe, por lo que la solución sería cambiar los datos de los campos, de forma indispensable el shortName.\r\n\r\n## Respuesta del método\r\nSi se ha creado el registro de forma correcta y el mensaje que se obtendrá será \"message\": \"Company was created\"."
+							},
+							"response": [
+								{
+									"name": "FIeld logo Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:40:02 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:40:02.864973\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"logo: logo value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Field logo Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": null,\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:40:28 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:40:28.774094\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"logo: logo value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld shortName Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:43:12 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:43:12.396419\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"shortName: shortName value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Field shortName Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:42:56 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:42:56.016306\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"shortName: shortName value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Field description Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"\",\r\n    \"logo\": \"test2\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:39:11 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:39:11.437652\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"description: description value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld description Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": null,\r\n    \"logo\": \"test2\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:39:37 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:39:37.961593\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"description: description value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld address Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": null,\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:42:27 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:42:27.777052\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"address: address value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld address Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:41:55 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:41:55.865648\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"address: address value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld website Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": null,\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:41:23 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:41:23.648666\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"website: website value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Company shortName exists",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"repeated\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:47:23 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:47:23.260541\",\n    \"message\": \"Company shortName exists\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_COMPANY_02\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "Field website Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:40:56 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:40:56.68393\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"website: website value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test2\",\r\n    \"logo\": \"test2\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:35:57 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T17:35:56.960+00:00\",\n    \"status\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"\",\n    \"path\": \"/v1/emaker/company\"\n}"
+								}
+							]
+						},
+						{
+							"name": "2-ACCES apiHost/company",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"var jsonData1 = JSON.parse(responseBody);",
+											"pm.environment.set(\"varTestCompanyCd\",jsonData1.companyCode);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"description\": \"Compañía de origen Piura\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"\",\r\n    \"shortName\": \"AMERICA\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/company",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"company"
+									]
+								},
+								"description": "## Descripción\r\nEsta API registra y guarda la información de una compañía en la base de datos.\r\nPara que ésta y las demás API funcionen correctamente, necesitan el token en Autorización -> Bearer Token\r\n\r\n## Requisitos en Body\r\nPara crear una compañía necesitamos enviar la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| descripción (Not null) | String |\r\n| logo (Not null) | String |\r\n| sitio web (Not null) | String |\r\n| dirección (Not null) | String |\r\n| secundariaAddress (Null) | String |\r\n| shortName (Not null) | String |\r\n\r\n## Código de error:\r\n\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API.\r\n\r\n### - EMAKER_01\r\nEsta respuesta significa que hubo un error en las validaciones de campo vacío o nulo.\r\n\r\n### - EMAKER_COMPANY_02\r\nEsta respuesta significa que la compañía que se quiere crear ya existe, por lo que la solución sería cambiar los datos de los campos, de forma indispensable el shortName.\r\n\r\n## Respuesta del método\r\nSi se ha creado el registro de forma correcta y el mensaje que se obtendrá será \"message\": \"Company was created\"."
+							},
+							"response": [
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test2\",\r\n    \"logo\": \"test2\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:35:57 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T17:35:56.960+00:00\",\n    \"status\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"\",\n    \"path\": \"/v1/emaker/company\"\n}"
+								},
+								{
+									"name": "Field website Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:40:56 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:40:56.68393\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"website: website value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld description Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": null,\r\n    \"logo\": \"test2\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:39:37 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:39:37.961593\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"description: description value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Company shortName exists",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"repeated\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:47:23 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:47:23.260541\",\n    \"message\": \"Company shortName exists\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_COMPANY_02\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "Field description Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"\",\r\n    \"logo\": \"test2\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:39:11 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:39:11.437652\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"description: description value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld logo Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"\",\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:40:02 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:40:02.864973\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"logo: logo value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld shortName Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:43:12 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:43:12.396419\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"shortName: shortName value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld website Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": null,\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:41:23 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:41:23.648666\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"website: website value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Field shortName Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"test\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:42:56 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:42:56.016306\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"shortName: shortName value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Field logo Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": null,\r\n    \"website\": \"test2\",\r\n    \"address\": \"test2\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:40:28 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:40:28.774094\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"logo: logo value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld address Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": \"\",\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:41:55 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:41:55.865648\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"address: address value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld address Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"description\": \"test\",\r\n    \"logo\": \"test\",\r\n    \"website\": \"test\",\r\n    \"address\": null,\r\n    \"secondaryAddress\": \"test2\",\r\n    \"shortName\": \"my company 2\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:42:27 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:42:27.777052\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/company\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"address: address value is null and API cannot be processed\"\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "1-ACCES apiHost/company/{{companyCode}}",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/company/{{varCompanyCode}}",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"company",
+										"{{varCompanyCode}}"
+									]
+								},
+								"description": "## Descripción\r\nEsta API devuelve la información de una compañía en función de su código.\r\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\r\ncompanyCode se pasa en el URI de acuerdo con la referencia del nombre de la API.\r\n\r\n## Requisito de la URI\r\nPara enviar la URI y consultar toda información referente a una compañía necesitamos ingresar en la URI la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| companyCode (Not null) | String |\r\n\r\n## Código de error:\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API. En este proyecto no se generará ese error, puesto que esta API no requiere permisos.\r\n\r\n### - EMAKER_COMPANY_01\r\nEsta respuesta significa que al validar companyCode en la base de datos no se obtuvo, porque no existe.\r\n\r\n## Respuesta del método\r\nAl consultar información a través del método GET obtengo la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| id (Not null) | int |\r\n| createDate (Not null) | int |\r\n| updateDate (Not null) | int |\r\n| description (Not null) | string |\r\n| logo | string |\r\n| website (Not null) | string |\r\n| address (Not null) | string |\r\n| secondaryAddress (Not null) | string |\r\n| shortName (Not null) | string |\r\n| companyCode (Not Null) | string |"
+							},
+							"response": [
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company/532d8979-1205-40ba-a773-c1c8c619163f",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company",
+												"532d8979-1205-40ba-a773-c1c8c619163f"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:30:28 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 1,\n    \"description\": \"test1\",\n    \"logo\": \"test1\",\n    \"website\": \"test1\",\n    \"address\": \"test1\",\n    \"secondaryAddress\": \"test1\",\n    \"shortName\": \"my company 1\",\n    \"createDate\": \"2021-02-17T06:38:15.002+00:00\",\n    \"updateDate\": \"2021-02-17T06:38:15.002+00:00\",\n    \"companyCode\": \"532d8979-1205-40ba-a773-c1c8c619163f\"\n}"
+								},
+								{
+									"name": "Company does not exists",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company/codeCompanyIncorrect",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company",
+												"codeCompanyIncorrect"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:29:45 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:29:45.668208\",\n    \"message\": \"Company does not exists\",\n    \"path\": \"uri=/v1/emaker/company/codeCompanyIncorrect\",\n    \"apiCode\": \"EMAKER_COMPANY_01\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company/532d8979-1205-40ba-a773-c1c8c619163f",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company",
+												"532d8979-1205-40ba-a773-c1c8c619163f"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:28:42 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T17:28:42.556+00:00\",\n    \"status\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"\",\n    \"path\": \"/v1/emaker/company/532d8979-1205-40ba-a773-c1c8c619163f\"\n}"
+								}
+							]
+						},
+						{
+							"name": "2-ACCES apiHost/company/{{companyCode}}",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/company/{{varTestCompanyCd}}",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"company",
+										"{{varTestCompanyCd}}"
+									]
+								},
+								"description": "## Descripción\r\nEsta API devuelve la información de una compañía en función de su código.\r\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\r\ncompanyCode se pasa en el URI de acuerdo con la referencia del nombre de la API.\r\n\r\n## Requisito de la URI\r\nPara enviar la URI y consultar toda información referente a una compañía necesitamos ingresar en la URI la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| companyCode (Not null) | String |\r\n\r\n## Código de error:\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API. En este proyecto no se generará ese error, puesto que esta API no requiere permisos.\r\n\r\n### - EMAKER_COMPANY_01\r\nEsta respuesta significa que al validar companyCode en la base de datos no se obtuvo, porque no existe.\r\n\r\n## Respuesta del método\r\nAl consultar información a través del método GET obtengo la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| id (Not null) | int |\r\n| createDate (Not null) | int |\r\n| updateDate (Not null) | int |\r\n| description (Not null) | string |\r\n| logo | string |\r\n| website (Not null) | string |\r\n| address (Not null) | string |\r\n| secondaryAddress (Not null) | string |\r\n| shortName (Not null) | string |\r\n| companyCode (Not Null) | string |"
+							},
+							"response": [
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company/532d8979-1205-40ba-a773-c1c8c619163f",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company",
+												"532d8979-1205-40ba-a773-c1c8c619163f"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:28:42 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T17:28:42.556+00:00\",\n    \"status\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"\",\n    \"path\": \"/v1/emaker/company/532d8979-1205-40ba-a773-c1c8c619163f\"\n}"
+								},
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company/532d8979-1205-40ba-a773-c1c8c619163f",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company",
+												"532d8979-1205-40ba-a773-c1c8c619163f"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:30:28 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 1,\n    \"description\": \"test1\",\n    \"logo\": \"test1\",\n    \"website\": \"test1\",\n    \"address\": \"test1\",\n    \"secondaryAddress\": \"test1\",\n    \"shortName\": \"my company 1\",\n    \"createDate\": \"2021-02-17T06:38:15.002+00:00\",\n    \"updateDate\": \"2021-02-17T06:38:15.002+00:00\",\n    \"companyCode\": \"532d8979-1205-40ba-a773-c1c8c619163f\"\n}"
+								},
+								{
+									"name": "Company does not exists",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/company/codeCompanyIncorrect",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"company",
+												"codeCompanyIncorrect"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 17:29:45 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T12:29:45.668208\",\n    \"message\": \"Company does not exists\",\n    \"path\": \"uri=/v1/emaker/company/codeCompanyIncorrect\",\n    \"apiCode\": \"EMAKER_COMPANY_01\",\n    \"details\": null\n}"
+								}
+							]
+						},
+						{
+							"name": "2-ACCES apiHost/company/{{companyCode}",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"description\": \"Compañía de origen Piura\",\n    \"logo\": \"test\",\n    \"website\": \"test\",\n    \"address\": \"test\",\n    \"secondaryAddress\": \"test\",\n    \"shortName\": \"{{$randomLastName}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/company/{{varTestCompanyCd}}",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"company",
+										"{{varTestCompanyCd}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ACCES apiHost/company/{{companyCode}}",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{apiHost}}/company/{{varTestCompanyCd}}",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"company",
+										"{{varTestCompanyCd}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "directory",
+					"item": [
+						{
+							"name": "1-SUCCESS apiHost/{{companyCode}}/directory",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Successful POST request\", () => {",
+											"  pm.expect(pm.response.code).to.be.oneOf([201]);",
+											"});",
+											"",
+											"//pm.variables.replaceIn('{{$randomFirstName}}');",
+											"",
+											"var jsonData1 = JSON.parse(responseBody);",
+											"pm.environment.set(\"varDirectoryCd\",jsonData1.directoryCode);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{$randomFirstName}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/{{varCompanyCode}}/directory",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"{{varCompanyCode}}",
+										"directory"
+									]
+								},
+								"description": "## Descripción\r\nEsta API elimina un directorio relacionado con un código de compañía de la base de datos.\r\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\r\ncompanyCode y directoryCode se pasan en el URI de acuerdo con la referencia del nombre de la API\r\n\r\n## Requisito de la URI\r\nPara enviar la URI y crear un directorio necesitamos la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| companyCode (Not null) | String |\r\n| directoryCode (Not null) | String |\r\n\r\nEsta información se puede obtener con el método GET del API Directory.\r\n\r\n## Código de error:\r\n\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo ninguna autorización de token para interactuar con la API.\r\n\r\n### - EMAKER_AWS_03\r\nEsta respuesta significa que no hay ningún segmento para esa empresa.\r\n\r\n### - EMAKER_DIRECTORY_03\r\nEsta respuesta significa que no hay un directorio en la empresa o que el registro que se pretende borrar ya no existe.\r\n\r\n## Respuesta del método\r\nSi se ha eliminado el registro de forma correcta y el mensaje que se obtendrá será \"message\": \"Directory was removed\""
+							},
+							"response": [
+								{
+									"name": "Name Validation Not Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e8f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:02:14 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:02:14.0191586\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"name: name value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"directory 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:04:20 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Directory was created\"\n}"
+								},
+								{
+									"name": "Company Validation Exists",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"directory 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e8f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:02:50 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:02:50.71442\",\n    \"message\": \"Company does not exists\",\n    \"path\": \"uri=/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_COMPANY_01\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "Name Validation Not Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e8f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:01:19 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:01:18.3653374\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"name: name value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Directory Validation Repeated In Company",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"directory 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:05:35 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:05:35.3902534\",\n    \"message\": \"Directory is already registered\",\n    \"path\": \"uri=/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_DIRECTORY_02\",\n    \"details\": null\n}"
+								}
+							]
+						},
+						{
+							"name": "2-SUCCESS apiHost/{{companyCode}}/directory",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Successful POST request\", () => {",
+											"  pm.expect(pm.response.code).to.be.oneOf([201]);",
+											"});",
+											"",
+											"//pm.variables.replaceIn('{{$randomFirstName}}');",
+											"",
+											"var jsonData1 = JSON.parse(responseBody);",
+											"pm.environment.set(\"varTestDirectoryCd\",jsonData1.directoryCode);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Company of Test\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/{{varCompanyCode}}/directory",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"{{varCompanyCode}}",
+										"directory"
+									]
+								},
+								"description": "## Descripción\r\nEsta API elimina un directorio relacionado con un código de compañía de la base de datos.\r\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\r\ncompanyCode y directoryCode se pasan en el URI de acuerdo con la referencia del nombre de la API\r\n\r\n## Requisito de la URI\r\nPara enviar la URI y crear un directorio necesitamos la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| companyCode (Not null) | String |\r\n| directoryCode (Not null) | String |\r\n\r\nEsta información se puede obtener con el método GET del API Directory.\r\n\r\n## Código de error:\r\n\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo ninguna autorización de token para interactuar con la API.\r\n\r\n### - EMAKER_AWS_03\r\nEsta respuesta significa que no hay ningún segmento para esa empresa.\r\n\r\n### - EMAKER_DIRECTORY_03\r\nEsta respuesta significa que no hay un directorio en la empresa o que el registro que se pretende borrar ya no existe.\r\n\r\n## Respuesta del método\r\nSi se ha eliminado el registro de forma correcta y el mensaje que se obtendrá será \"message\": \"Directory was removed\""
+							},
+							"response": [
+								{
+									"name": "Name Validation Not Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e8f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:02:14 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:02:14.0191586\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"name: name value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Company Validation Exists",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"directory 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e8f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:02:50 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:02:50.71442\",\n    \"message\": \"Company does not exists\",\n    \"path\": \"uri=/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_COMPANY_01\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "Directory Validation Repeated In Company",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"directory 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:05:35 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:05:35.3902534\",\n    \"message\": \"Directory is already registered\",\n    \"path\": \"uri=/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_DIRECTORY_02\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "Name Validation Not Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e8f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:01:19 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:01:18.3653374\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/e8f64862-0efb-4809-93f6-ddb03e64d025/directory\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"name: name value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"directory 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:04:20 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Directory was created\"\n}"
+								}
+							]
+						},
+						{
+							"name": "SUCCESS apiHost/{{companyCode}}/directory",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{apiHost}}/{{varCompanyCode}}/directory",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"{{varCompanyCode}}",
+										"directory"
+									]
+								},
+								"description": "## Descripción\r\nEsta API retorna la información del directorio en función del código de la compañia a la que pertenecen.\r\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\r\ncompanyCode se pasa en el URI de acuerdo con la referencia del nombre de la API\r\n\r\n## Requisito de la URI\r\nPara enviar la URI y obtener los directorios necesitamos ingresar en la URI la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| companyCode (Not null) | String |\r\n\r\n## Código de error:\r\n\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo ninguna autorización de token para interactuar con la API.\r\n\r\n### - EMAKER_COMPANY_01\r\nEsta respuesta significa que al validar companyCode en la base de datos no se obtuvo o no existe.\r\n\r\n## Respuesta del método\r\nAl consultar información a través del método GET obtenemos todos los directorios que pertenecen al companyCod de la cuál están consultando. La estructura de la información es la siguiente:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| id (Not null) | int |\r\n| createDate (Not null) | int |\r\n| updateDate (Not null) | int |\r\n| name (Not null) | string |\r\n| companyCode (Not null) | string |\r\n| directoryCode (Not Null) | string |"
+							},
+							"response": [
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:10:16 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"directory 1\",\n        \"createDate\": \"2021-02-08T11:04:19.626+00:00\",\n        \"updateDate\": \"2021-02-08T11:04:19.627+00:00\",\n        \"companyCode\": \"e7f64862-0efb-4809-93f6-ddb03e64d025\",\n        \"directoryCode\": \"04dc060b-aa94-43e3-bdf6-57f3a201edd0\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "SUCCESS apiHost/{{companyCode}}/directory/{{directoryCode}}",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"//pm.variables.replaceIn('{{$randomFirstName}}');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/{{varCompanyCode}}/directory/{{varTestDirectoryCd}}",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"{{varCompanyCode}}",
+										"directory",
+										"{{varTestDirectoryCd}}"
+									]
+								},
+								"description": "## Descripción\nEsta API actualiza un directorio relacionado con una compañía en la base de datos.\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\ncompanyCode y directoryCode se pasan en el URI de acuerdo con la referencia del nombre de la API.\n\n## Requisitos de la URI\nPara enviar la URI y crear un directorio necesitamos la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ------ | ------ |\n| companyCode (Not null) | String |\n| directoryCode (Not null) | String |\n\n## Requisitos en Body\nPara actualizar un directorio necesitamos enviar la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ------ | ------ |\n| name (Not null) | String |\n\n## Código de error:\n\n### - NO AUTORIZADO\nEsta respuesta significa que no se obtuvo ninguna autorización de token para interactuar con la API.\n\n### - EMAKER_AWS_03\nEsta respuesta significa que no hay ningún segmento para esa empresa.\n\n### - EMAKER_DIRECTORY_02\nEsta respuesta significa que el directorio ya existe en la empresa, por lo tanto no se actualizó el campo name del directorio.\n\n## Respuesta del método\nDe ser correcta la ejecución del método, se actualizará el name del directorio para la compañía que se está pasando en la URI. EL mensaje que se obtendrá será \"message\": \"\"Directory was updated\"\nPuedes verificar la actualización name del registro ejecutando el método GET de la API Directory."
+							},
+							"response": [
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Carpeta 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory",
+												"04dc060b-aa94-43e3-bdf6-57f3a201edd0"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:19:01 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Directory was updated\"\n}"
+								},
+								{
+									"name": "Name Validation Not Null",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory",
+												"04dc060b-aa94-43e3-bdf6-57f3a201edd0"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:20:42 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:20:42.6916892\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"name: name value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Name Validation Not Empty",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory",
+												"04dc060b-aa94-43e3-bdf6-57f3a201edd0"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:20:18 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:20:18.5301414\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"name: name value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Directory Validation Repeated In Company",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"directory 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory",
+												"04dc060b-aa94-43e3-bdf6-57f3a201edd0"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:21:18 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:21:18.8135251\",\n    \"message\": \"Directory is already registered\",\n    \"path\": \"uri=/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0\",\n    \"apiCode\": \"EMAKER_DIRECTORY_02\",\n    \"details\": null\n}"
+								}
+							]
+						},
+						{
+							"name": "SUCCESS apiHost/{{companyCode}}/directory/{{directoryCode}}",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/{{varCompanyCode}}/directory/{{varTestDirectoryCd}}",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"{{varCompanyCode}}",
+										"directory",
+										"{{varTestDirectoryCd}}"
+									]
+								},
+								"description": "## Descripción\r\nEsta API elimina un directorio relacionado con un código de compañía de la base de datos.\r\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\r\ncompanyCode y directoryCode se pasan en el URI de acuerdo con la referencia del nombre de la API\r\n\r\n## Requisito de la URI\r\nPara enviar la URI y crear un directorio necesitamos la siguiente información:\r\n\r\n| CAMPO | TIPO DE CAMPO |\r\n| ------ | ------ |\r\n| companyCode (Not null) | String |\r\n| directoryCode (Not null) | String |\r\n\r\nEsta información se puede obtener con el método GET del API Directory.\r\n\r\n## Código de error:\r\n\r\n### - NO AUTORIZADO\r\nEsta respuesta significa que no se obtuvo ninguna autorización de token para interactuar con la API.\r\n\r\n### - EMAKER_AWS_03\r\nEsta respuesta significa que no hay ningún segmento para esa empresa.\r\n\r\n### - EMAKER_DIRECTORY_03\r\nEsta respuesta significa que no hay un directorio en la empresa o que el registro que se pretende borrar ya no existe.\r\n\r\n## Respuesta del método\r\nSi se ha eliminado el registro de forma correcta y el mensaje que se obtendrá será \"message\": \"Directory was removed\"."
+							},
+							"response": [
+								{
+									"name": "Directory Validation Exists In Company",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/05dc060b-aa94-43e3-bdf6-57f3a201edd0",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory",
+												"05dc060b-aa94-43e3-bdf6-57f3a201edd0"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:28:27 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-02-08T05:28:27.1146778\",\n    \"message\": \"Directory does not exists in the company\",\n    \"path\": \"uri=/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/05dc060b-aa94-43e3-bdf6-57f3a201edd0\",\n    \"apiCode\": \"EMAKER_DIRECTORY_03\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/v1/emaker/e7f64862-0efb-4809-93f6-ddb03e64d025/directory/04dc060b-aa94-43e3-bdf6-57f3a201edd0",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"e7f64862-0efb-4809-93f6-ddb03e64d025",
+												"directory",
+												"04dc060b-aa94-43e3-bdf6-57f3a201edd0"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 08 Feb 2021 11:44:16 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Directory was removed\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "file",
+					"item": [
+						{
+							"name": "apiHost/file",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var jsonObject = xml2Json(responseBody);",
+											"let fileTmp= jsonObject.ListBucketResult.Contents[0].Key",
+											"postman.setEnvironmentVariable(\"NameFileTmp\",fileTmp);",
+											"postman.setEnvironmentVariable(\"varFileTmp\",\"s3://emaker-tmp/\"+fileTmp);",
+											"",
+											"console.log(fileTmp);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "awsv4",
+									"awsv4": [
+										{
+											"key": "secretKey",
+											"value": "/80weiHvvAOnejagBfxBhfZsVxJ6RMlVJ5whxWGI",
+											"type": "string"
+										},
+										{
+											"key": "sessionToken",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "region",
+											"value": "us-east-1",
+											"type": "string"
+										},
+										{
+											"key": "service",
+											"value": "s3",
+											"type": "string"
+										},
+										{
+											"key": "addAuthDataToQuery",
+											"value": true,
+											"type": "boolean"
+										},
+										{
+											"key": "accessKey",
+											"value": "AKIATI3WHEIVW5UJI3LQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://emaker-tmp.s3.amazonaws.com/",
+									"protocol": "https",
+									"host": [
+										"emaker-tmp",
+										"s3",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ACCESS apiHost/{{companyCode}}/file/upload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"file\": \"{{varFileTmp}}\",\r\n    \"directoryCode\": \"{{varDirectoryCd}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/{{varCompanyCode}}/file/upload",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"{{varCompanyCode}}",
+										"file",
+										"upload"
+									]
+								},
+								"description": "## Descripción\nEsta API ubica y envía un archivo desde el bucket de S3 tmp al bucket de S3 de su respectivo directorio asociado a su respectiva compañía. AL final, crea un registro de dónde dice en qué lugar está el bucket. Cada compañía tiene su bucket.\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\ncompanyCode se pasa en el URI de acuerdo con la referencia del nombre de la API\n\n## Requisitos de la URI\nPara enviar la URI necesitamos la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ------ | ------ |\n| companyCode (Not null) | String |\n\n## Requisitos en Body\nPara crear una directorio necesitamos enviar la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ------ | ------ |\n| file (Not null) | String |\n| directoryCode (Not null) | String |\n\n## Código de error:\n\n### - NO AUTORIZADO\nEsta respuesta significa que no se obtuvo ninguna autorización de token para interactuar con la API.\n\n### - EMAKER_01\nEsta respuesta significa que hubo un error en las validaciones de campo vacío o nulo.\n\n### - EMAKER_COMPANY_01\nEsta respuesta significa que al validar companyCode en la base de datos no se obtuvo porque no existe.\n\n### - EMAKER_DIRECTORY_01\nEsta respuesta significa que al validar el directoryCode en la base de datos no se obtuvo porque no existe.\n\n### - EMAKER_FILE_01\nEsta respuesta significa que el archivo no se puede encontrar en el depósito tmp de S3.\n\n## Respuesta del método\nDe ser correcta la ejecución del método, se ubicará el archivo que está en el Bucket temporal y se moverá al Bucket de la compañía (cada compañía tiene su Bucket) asociándose así a la compañía. EL mensaje que se obtendrá será \"message\": \"File was created\""
+							},
+							"response": [
+								{
+									"name": "Company does not exists",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": \"s3://emaker-tmp/file6.txt\",\r\n    \"directoryCode\": \"117b328e-b88d-4d52-85fb-e70459d23ccc\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/companyCodeIncorrect/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"companyCodeIncorrect",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 18:17:43 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T13:17:43.665679\",\n    \"message\": \"Company does not exists\",\n    \"path\": \"uri=/v1/emaker/companyCodeIncorrect/file/upload\",\n    \"apiCode\": \"EMAKER_COMPANY_01\",\n    \"details\": null\n}"
+								},
+								{
+									"name": "FIeld file Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": null,\r\n    \"directoryCode\": \"117b328e-b88d-4d52-85fb-e70459d23ccc\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 18:19:43 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T13:19:43.910442\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"file: file value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": \"s3://emaker-tmp/file6.txt\",\r\n    \"directoryCode\": \"117b328e-b88d-4d52-85fb-e70459d23ccc\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 18:16:47 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T18:16:47.828+00:00\",\n    \"status\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"\",\n    \"path\": \"/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload\"\n}"
+								},
+								{
+									"name": "FIeld directoryCode Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": \"s3://emaker-tmp/file6.txt\",\r\n    \"directoryCode\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 18:20:05 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T13:20:05.996257\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"directoryCode: directoryCode value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Field file Empty",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": \"\",\r\n    \"directoryCode\": \"117b328e-b88d-4d52-85fb-e70459d23ccc\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 18:19:21 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T13:19:21.50945\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"file: file value is empty and the API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "FIeld directoryCode Null",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": \"s3://emaker-tmp/file6.txt\",\r\n    \"directoryCode\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 18:20:23 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T13:20:23.313943\",\n    \"message\": \"Validation failed\",\n    \"path\": \"uri=/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload\",\n    \"apiCode\": \"EMAKER_01\",\n    \"details\": [\n        \"directoryCode: directoryCode value is null and API cannot be processed\"\n    ]\n}"
+								},
+								{
+									"name": "Ok",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": \"s3://emaker-tmp/file6.txt\",\r\n    \"directoryCode\": \"117b328e-b88d-4d52-85fb-e70459d23ccc\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=UTF-8"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 29 Dec 2020 17:21:00 GMT"
+										},
+										{
+											"key": "Content-Length",
+											"value": "17"
+										},
+										{
+											"key": "Sozu-Id",
+											"value": "de5c3445-4a63-46e3-adcb-f1e542e211d3"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"The uploading file was done successfully.\"\n}"
+								},
+								{
+									"name": "DIrectory does not exists",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"file\": \"s3://emaker-tmp/file6.txt\",\r\n    \"directoryCode\": \"incorrect\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"v1",
+												"emaker",
+												"87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0",
+												"file",
+												"upload"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 12 Mar 2021 18:18:12 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": \"2021-03-12T13:18:12.689839\",\n    \"message\": \"Directory does not exists\",\n    \"path\": \"uri=/v1/emaker/87bbe5cc-53f0-4e4e-be41-ba861b8d0fd0/file/upload\",\n    \"apiCode\": \"EMAKER_DIRECTORY_01\",\n    \"details\": null\n}"
+								}
+							]
+						},
+						{
+							"name": "apiHost/{{companyCode}}/file?{FILTER}={VALUE}",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiHost}}/{{varCompanyCode}}/file?name={{NameFileTmp}}",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"{{varCompanyCode}}",
+										"file"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{NameFileTmp}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "mailschedule",
+					"item": [
+						{
+							"name": "G-ACCES apiHost/schedule",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setEnvironmentVariable(\"resource\", \"company\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"var jsonData2 = JSON.parse(responseBody);",
+											"pm.environment.set(\"varIdMailcheduleG\",jsonData2.mailScheduleId);",
+											"",
+											"/*",
+											"pm.variables.replaceIn('{{$randomBs}}');",
+											"pm.variables.replaceIn('{{$randomPhrase}}');",
+											"pm.variables.replaceIn('{{$randomEmail}}');",
+											"pm.variables.replaceIn('{{$randomExampleEmail}}');",
+											"pm.variables.replaceIn('{{$randomFirstName}}');",
+											"pm.variables.replaceIn('{{$randomLastName}}');*/"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"scheduleType\": \"General\",\r\n    \"sendTime\": \"2020-12-28T18:56:13.856+00:00\",\r\n    \"subject\": \"{{$randomBs}}\",\r\n    \"cc\": [\r\n        \"{{$randomEmail}}\",\r\n        \"{{$randomExampleEmail}}\",\r\n        \"test.test@test.com\"\r\n    ],\r\n    \"content\": \"{{$randomPhrase}}\",\r\n    \"attachedFile\": [\r\n        \"s3://files/tmp/schedule/file-1.txt\",\r\n        \"s3://files/tmp/schedule/file-2.txt\",\r\n        \"s3://files/tmp/schedule/file-1.txt\"\r\n    ],\r\n    \"variablesFile\": \"s3://files/tmp/schedule/file-1.xls\",\r\n    \"variables\": [\r\n        \"variable1\",\r\n        \"variable2\",\r\n        \"variable3\",\r\n        \"variable4\"\r\n    ],\r\n    \"target\": [\r\n    \"{{$randomEmail}}\",\r\n    \"test.test@test.com\",\r\n    \"test.test@test.com\"\r\n],\r\n    \"createUser\": \"{{$randomFirstName}}\",\r\n    \"updateUser\": \"{{$randomLastName}}\",\r\n\t\"companyCode\": \"{{varCompanyCode}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/schedule",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"schedule"
+									]
+								},
+								"description": "## Descripción\nEsta API envía y crea un archivo con toda la información del horario del email a enviar.\nSe puede crear varios horarios para un mismo directorio.\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\n\n## Requisitos en Body\nPara crear el horario necesitamos la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ----- | ----- |\n| scheduleType (Not Null) | String |\n| sendTime (Not Null) | TimeStamp |\n| subject (Not Null) | String |\n| cc (Null) | List<String> |\n| content (Not Null) | String |\n| attachedFile (Null) | List<String> |\n| variablesFile (Null) | String |\n| variables (Null) | List<String> |\n| target (Not Null) | List<String> |\n| createUser (Not null) | String |\n| updateUser (Not null) | String |\n| directoryCode (Null) | String |\n| companyCode(Not Null) | String |\n\n## Código de error:\n### - NO AUTORIZADO\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API.\n\n### - EMAKER_01\nEsta respuesta significa que hubo un error en las validaciones de campo vacío o nulo.\n\n### - EMAKER_COMPANY_01\nEsta respuesta significa que al validar companyCode en la base de datos no se obtuvo o tal vez no existe.\n\n### - EMAKER_DIRECTORY_01\nEsta respuesta significa que al validar el directoryCode (se obtiene de GET Directory) en la base de datos no se obtuvo o tal vez no existe.\n\n## Respuesta del método\nDe ser correcta la ejecución del método, se creará un horario para esa compañía y directorio que se pasó en el Body. EL mensaje que se obtendrá será \"message\": \"Mail schedule was created\"."
+							},
+							"response": []
+						},
+						{
+							"name": "P-ACCES apiHost/schedule",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"var jsonData2 = JSON.parse(responseBody);",
+											"pm.environment.set(\"varIdMailcheduleP\",jsonData2.mailScheduleId);",
+											"",
+											"/*",
+											"pm.variables.replaceIn('{{$randomBs}}');",
+											"pm.variables.replaceIn('{{$randomPhrase}}');",
+											"pm.variables.replaceIn('{{$randomEmail}}');",
+											"pm.variables.replaceIn('{{$randomExampleEmail}}');",
+											"pm.variables.replaceIn('{{$randomFirstName}}');",
+											"pm.variables.replaceIn('{{$randomLastName}}');*/"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setEnvironmentVariable(\"resource\", \"company\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"scheduleType\": \"Personalizado\",\r\n    \"sendTime\": \"2020-12-28T18:56:13.856+00:00\",\r\n    \"subject\": \"{{$randomBs}}\",\r\n    \"cc\": [\r\n        \"{{$randomEmail}}\",\r\n        \"{{$randomExampleEmail}}\",\r\n        \"test.test@test.com\"\r\n    ],\r\n    \"content\": \"{{$randomPhrase}}\",\r\n    \"attachedFile\": [\r\n        \"s3://files/tmp/schedule/file-1.txt\",\r\n        \"s3://files/tmp/schedule/file-2.txt\",\r\n        \"s3://files/tmp/schedule/file-1.txt\"\r\n    ],\r\n    \"variablesFile\": \"s3://files/tmp/schedule/file-1.xls\",\r\n    \"variables\": [\r\n        \"variable1\",\r\n        \"variable2\",\r\n        \"variable3\",\r\n        \"variable4\"\r\n    ],\r\n    \"target\": [\r\n        \"{{$randomEmail}}\",\r\n        \"test.test@test.com\"\r\n    ],\r\n    \"createUser\": \"{{$randomFirstName}}\",\r\n    \"updateUser\": \"{{$randomLastName}}\",\r\n    \"directoryCode\": \"{{varDirectoryCd}}\",\r\n    \"companyCode\": \"{{varCompanyCode}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiHost}}/schedule",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"schedule"
+									]
+								},
+								"description": "## Descripción\nEsta API envía y crea un archivo con toda la información del horario del email a enviar.\nSe puede crear varios horarios para un mismo directorio.\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\n\n## Requisitos en Body\nPara crear el horario necesitamos la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ----- | ----- |\n| scheduleType (Not Null) | String |\n| sendTime (Not Null) | TimeStamp |\n| subject (Not Null) | String |\n| cc (Null) | List<String> |\n| content (Not Null) | String |\n| attachedFile (Null) | List<String> |\n| variablesFile (Null) | String |\n| variables (Null) | List<String> |\n| target (Not Null) | List<String> |\n| createUser (Not null) | String |\n| updateUser (Not null) | String |\n| directoryCode (Null) | String |\n| companyCode(Not Null) | String |\n\n## Código de error:\n### - NO AUTORIZADO\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API.\n\n### - EMAKER_01\nEsta respuesta significa que hubo un error en las validaciones de campo vacío o nulo.\n\n### - EMAKER_COMPANY_01\nEsta respuesta significa que al validar companyCode en la base de datos no se obtuvo o tal vez no existe.\n\n### - EMAKER_DIRECTORY_01\nEsta respuesta significa que al validar el directoryCode (se obtiene de GET Directory) en la base de datos no se obtuvo o tal vez no existe.\n\n## Respuesta del método\nDe ser correcta la ejecución del método, se creará un horario para esa compañía y directorio que se pasó en el Body. EL mensaje que se obtendrá será \"message\": \"Mail schedule was created\"."
+							},
+							"response": []
+						},
+						{
+							"name": "apiHost/schedule/all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiHost}}/schedule",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"schedule"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "ACCESS apiHost/user/me",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{apiHost}}/user/me",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"user",
+										"me"
+									]
+								},
+								"description": "## Descripción\nEsta API devuelve información de userAccount que en ese momento está en la sesión, basada en el token.\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\n\n## Código de error:\n\n### - NO AUTORIZADO\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API.\n\n### - EMAKER_JWT_TOKEN_01\nEsta respuesta significa que al validar el token hubo un error.\n\n## Respuesta del método\nDe ser correcta la ejecución del método GET obtenemos infromación sobre el usuario que en ese momento está en sesión. La estructura de la información es la siguiente:\n\n| CAMPO | TIPO DE CAMPO |\n| ------ | ------ |\n| id (Not null) | int |\n| createDate (Not null) | int |\n| updateDate (Not null) | int |\n| fullName (Not null) | string |\n| email(Not null) | string |\n| login (Not null) | string |\n| password (Not null) | string |\n| role (Not null) | string |\n| userCode (Not null) | string |\n| companyCode (Not Null) | string |"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "scheduleevents",
+					"item": [
+						{
+							"name": "apiHost/schedule/events/{{scheduleId}}",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{apiHost}}/schedule/events/588",
+									"host": [
+										"{{apiHost}}"
+									],
+									"path": [
+										"schedule",
+										"events",
+										"588"
+									]
+								},
+								"description": "## Descripción\nEsta API devuelve el evento de información de programación según el ScheduleId al que pertenecen. Guarda el historial de todos los cambios realizados, está ligado a un mailSchedulele.\nPara que la API funcione correctamente, necesita el token en Autorización -> Bearer Token\nscheduleId se pasa en el URI de acuerdo con la referencia del nombre de la API\n\n## Requisito de la URI\nPara enviar la URI, en la parte final debes colocar el schudeleId que empieza según programación de secuencia, se reinició desde el 500 hasta que se cree otro cambio y cambie la correlación.\n\nPara obtener los eventos en el horario de correo necesitamos la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ------ | ------ |\n| scheduleId (Not null) | int |\n\n## Código de error:\n\n### - NO AUTORIZADO\nEsta respuesta significa que no se obtuvo autorización de token para interactuar con la API.\n\n### - EMAKER_MAIL_SCHEDULE_01\nEsta respuesta significa que al validar scheduleId en la base de datos no se obtuvo, para eso revisar el schudeleId y así se solucionaría.\n\n## Respuesta del método\nAl consultar información a través del método GET obtengo la siguiente información:\n\n| CAMPO | TIPO DE CAMPO |\n| ------ | ------ |\n| eventTime (Not null) | int |\n| name (Not null) | string |\n| scheduleId (Not null) | int |\n| createDate (Not null) | int |\n| updateDate (Not null) | int |"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{localApiHost}}/schedule/events/2",
+											"host": [
+												"{{localApiHost}}"
+											],
+											"path": [
+												"schedule",
+												"events",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 29 Apr 2021 01:50:43 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"eventTime\": 1609181773856,\n        \"name\": \"CREATED\",\n        \"scheduleId\": 2,\n        \"createDate\": 1619659685739,\n        \"updateDate\": 1619659685739\n    }\n]"
+								},
+								{
+									"name": "Mail Schedule does not exists",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{localApiHost}}/schedule/events/3",
+											"host": [
+												"{{localApiHost}}"
+											],
+											"path": [
+												"schedule",
+												"events",
+												"3"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "1; mode=block"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 29 Apr 2021 01:54:18 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"timestamp\": [\n        2021,\n        4,\n        28,\n        20,\n        54,\n        18,\n        12634000\n    ],\n    \"message\": \"MailSchedule does not exists\",\n    \"path\": \"uri=/v1/emaker/schedule/events/3\",\n    \"apiCode\": \"EMAKER_MAIL_SCHEDULE_01\",\n    \"details\": null\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
